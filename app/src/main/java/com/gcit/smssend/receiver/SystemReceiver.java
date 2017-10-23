@@ -4,30 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.gcit.smssend.base.BaseReceiver;
-import com.gcit.smssend.utils.Logs;
 import com.gcit.smssend.utils.keepLive.KeepLiveManager;
 
 /**
  * <p>describe</p><br>
  *
  * @author - lwc
- * @date - 2017/10/22
+ * @date - 2017/10/23
  * @note -
  * -------------------------------------------------------------------------------------------------
  * @modified -
  * @date -
  * @note -
  */
-public class KeepLiveReceiver extends BaseReceiver {
+public class SystemReceiver extends BaseReceiver {
     @Override
     public void onReceive(Context context, Intent intent, int flag) {
-        String action = intent.getAction();
-        Logs.e(action);
-        if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-            KeepLiveManager.getInstance().startKeepLiveActivity();
-        } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
-            KeepLiveManager.getInstance().finishKeepLiveActivity();
-        }
         KeepLiveManager.getInstance().startKeepLiveService();
     }
 }

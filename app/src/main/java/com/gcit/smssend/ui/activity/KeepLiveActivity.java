@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.gcit.smssend.utils.Logs;
 import com.gcit.smssend.utils.keepLive.KeepLiveManager;
 
 /**
@@ -24,7 +25,7 @@ public class KeepLiveActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Logs.e("onCreate");
         Window window = getWindow();
         window.setGravity(Gravity.LEFT | Gravity.TOP);
         WindowManager.LayoutParams params = window.getAttributes();
@@ -33,7 +34,42 @@ public class KeepLiveActivity extends Activity {
         params.height = 1;
         params.width = 1;
         window.setAttributes(params);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Logs.e("onStart");
         KeepLiveManager.getInstance().mKeepLiveActivity = this;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Logs.e("onResume");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Logs.e("onRestart");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Logs.e("onStop");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Logs.e("onPause");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logs.e("onDestroy");
     }
 }

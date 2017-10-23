@@ -65,12 +65,9 @@ public class SmsObserver extends ContentObserver {
         while (cursor.moveToNext()) {
             String smsSender = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
             String smsBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
-            Logs.e("smsSender", smsSender, "smsBody", smsBody);
             long id = cursor.getLong(cursor.getColumnIndex(Telephony.Sms._ID));
-            Logs.e("id", id);
-
             String date = TimeUtils.millis2String(cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE)));
-            Logs.e("date", date);
+            Logs.e("smsSender", smsSender, "smsBody", smsBody,"id", id,"date", date);
         }
 
         closeCursor(cursor);
