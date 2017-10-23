@@ -8,12 +8,16 @@ import android.widget.TextView;
 
 import com.gcit.smssend.R;
 import com.gcit.smssend.base.BaseActivity;
+import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.receiver.KeepLiveReceiver;
 import com.gcit.smssend.receiver.SystemReceiver;
 import com.gcit.smssend.service.SmsService;
+import com.gcit.smssend.utils.Logs;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
 
@@ -50,6 +54,20 @@ public class MainActivity extends BaseActivity {
             filter.addAction(Intent.ACTION_USER_PRESENT);
             registerReceiver(mSystemReceiver, filter);
         }
+        HttpUtils.getSmsInfoService().smsinfo("1000")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+                        Logs.e(o);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Logs.e(throwable);
+                    }
+                });
     }
 
     private void initView() {

@@ -12,4 +12,6 @@ package com.gcit.smssend.constant;
  * @note -
  */
 public class URLs {
+    /** Host */
+    public static final String HTTP_HOST = "http://sanqingjw.gov.cn/public/home/";
 }

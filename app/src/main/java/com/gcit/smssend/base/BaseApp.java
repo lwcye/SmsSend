@@ -8,6 +8,8 @@ import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 import com.gcit.smssend.BuildConfig;
 import com.gcit.smssend.constant.SharedPrefs;
+import com.gcit.smssend.constant.URLs;
+import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.network.RetrofitWrapper;
 import com.gcit.smssend.utils.Logs;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -85,6 +87,10 @@ public class BaseApp extends Application {
         //友盟统计
         MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this, "59eb3c7cf29d98676400000c", "lwcye"));
         MobclickAgent.setCatchUncaughtExceptions(true);
+
+        //Retrofit
+        RetrofitWrapper.init(this, 12000, 12000);
+        HttpUtils.setUrl(URLs.HTTP_HOST);
     }
 
     @Override
