@@ -10,7 +10,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.blankj.utilcode.util.Utils;
-import com.gcit.smssend.job.KeepLiveScheduler;
 import com.gcit.smssend.job.KeepLiveService;
 import com.gcit.smssend.service.SmsService;
 import com.gcit.smssend.ui.activity.KeepLiveActivity;
@@ -93,6 +92,5 @@ public class KeepLiveManager {
         builder.setPeriodic(10);
         builder.setPersisted(true);
 
-        KeepLiveScheduler.getInstance().schedule(builder.build());
     }
 }

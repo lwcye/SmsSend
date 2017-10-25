@@ -14,4 +14,6 @@ package com.gcit.smssend.constant;
 public class SharedPrefs {
     /** sharePreference的fileName **/
     public static final String FILE_NAME = "base_config";
+    /** smsService是否存货 **/
+    public static final String isSmsServiceKeepLive = "isSmsServiceKeepLive";
 }
