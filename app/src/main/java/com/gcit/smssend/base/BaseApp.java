@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.Utils;
 import com.gcit.smssend.BuildConfig;
 import com.gcit.smssend.constant.SharedPrefs;
 import com.gcit.smssend.constant.URLs;
+import com.gcit.smssend.db.DbWrapper;
 import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.network.RetrofitWrapper;
 import com.gcit.smssend.utils.Logs;
@@ -35,6 +36,8 @@ public class BaseApp extends Application {
     private static BaseApp sBaseApp;
     /** 系统偏好设置 */
     private static SPUtils spUtils;
+    /** 服务是否存在 */
+    public boolean isKeepLive = false;
 
     public static BaseApp getInstance() {
         return sBaseApp;
@@ -90,6 +93,9 @@ public class BaseApp extends Application {
         //Retrofit
         RetrofitWrapper.init(this, 12000, 12000);
         HttpUtils.setUrl(URLs.HTTP_HOST);
+
+        //db
+        DbWrapper.init(this);
     }
 
     @Override

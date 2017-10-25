@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.blankj.utilcode.util.LogUtils;
 import com.gcit.smssend.db.dao.DaoMaster;
 import com.gcit.smssend.db.dao.DaoSession;
+import com.gcit.smssend.db.dao.MobileBeanDao;
 import com.gcit.smssend.db.dao.SmsModelDao;
 import com.gcit.smssend.utils.MigrationHelper;
 
@@ -84,7 +85,7 @@ public class DbWrapper {
             LogUtils.d("upgrade db(" + DB_NAME + ") from " + oldVersion + " to " + newVersion);
 
             // 升级数据库
-            MigrationHelper.migrate(db, SmsModelDao.class);
+            MigrationHelper.migrate(db, SmsModelDao.class, MobileBeanDao.class);
         }
     }
 }

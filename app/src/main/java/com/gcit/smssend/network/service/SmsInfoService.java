@@ -1,5 +1,7 @@
 package com.gcit.smssend.network.service;
 
+import com.gcit.smssend.network.ApiResult;
+
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -19,5 +21,14 @@ import rx.Observable;
 public interface SmsInfoService {
     @FormUrlEncoded
     @POST("smsapi/smsinfo")
-    Observable<Object> smsinfo(@Field("mobile") String mobile);
+    Observable<ApiResult> smsinfo(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST("smsapi/smspost")
+    Observable<ApiResult> smspost(
+            @Field("create_time") String create_time,
+            @Field("mobile") String mobile,
+            @Field("content") String content
+    );
+
 }

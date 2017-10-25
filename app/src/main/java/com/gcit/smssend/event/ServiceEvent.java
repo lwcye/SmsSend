@@ -12,4 +12,9 @@ package com.gcit.smssend.event;
  * @note -
  */
 public class ServiceEvent {
+    public boolean isKeepLive;
+
+    public ServiceEvent(boolean isKeepLive) {
+        this.isKeepLive = isKeepLive;
+    }
 }

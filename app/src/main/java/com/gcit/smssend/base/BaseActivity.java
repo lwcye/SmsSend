@@ -11,6 +11,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -122,6 +123,16 @@ public class BaseActivity extends AppCompatActivity implements BaseView, Lifecyc
         mLifecycleSubject.onNext(ActivityEvent.DESTROY);
         getWindow().getDecorView().removeCallbacks(null);
         super.onDestroy();
+    }
+
+    /**
+     * 设置返回键
+     */
+    public void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     /**

@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">短信</string>
     <string name="open_sms">开启短信转发</string>
+    <string name="exit_if_again">再按一次退出</string>
+    <string name="activity_mobile">号码设置</string>
+    <string name="activity_error">错误短信</string>
+    <string name="delete">删除</string>
+    <string name="please_input_mobile">请输入号码</string>
+    <string name="add">新增</string>
+    <string name="error_network">网络错误</string>
 </resources>

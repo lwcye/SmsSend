@@ -5,7 +5,8 @@
 	<color name="colorAccent">#FF4081</color>
 	<color name="black_title">#333333</color>
 	<color name="black_hint">#999999</color>
-	
+	<color name="white">#fff</color>
+
 	
 	<!--灰阶-->
 	<color name="gray0">#FFFFFF</color>

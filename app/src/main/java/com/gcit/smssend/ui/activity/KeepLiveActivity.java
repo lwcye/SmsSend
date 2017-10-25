@@ -52,6 +52,7 @@ public class KeepLiveActivity extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        finish();
         Logs.e("onRestart");
     }
 

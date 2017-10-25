@@ -13,5 +13,7 @@ package com.gcit.smssend.constant;
  */
 public class ENVs {
     public static final long PHONE_NUM = 10658777;
+    /** 点击Back退出判定间隔(秒) */
+    public static final int BACK_TO_EXIT_INTERVAL = 3;
 
 }

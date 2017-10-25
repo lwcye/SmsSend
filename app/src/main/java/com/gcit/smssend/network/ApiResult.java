@@ -12,4 +12,7 @@ package com.gcit.smssend.network;
  * @note -
  */
 public class ApiResult {
+    public int status;
+    public int nums;
+    public String info;
 }

@@ -1,5 +1,7 @@
 package com.gcit.smssend.event;
 
+import com.gcit.smssend.db.bean.SmsBean;
+
 /**
  * <p>describe</p><br>
  *
@@ -12,4 +14,9 @@ package com.gcit.smssend.event;
  * @note -
  */
 public class SmsEvent {
+    public SmsBean mSmsBean;
+
+    public SmsEvent(SmsBean smsBean) {
+        mSmsBean = smsBean;
+    }
 }
