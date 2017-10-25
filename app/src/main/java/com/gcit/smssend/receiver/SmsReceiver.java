@@ -76,7 +76,7 @@ public class SmsReceiver extends BaseReceiver {
             List<MobileBean> mobileBeen = DbWrapper.getSession().getMobileBeanDao().loadAll();
             if (mobileBeen != null && mobileBeen.size() > 0) {
                 for (MobileBean mobileBean : mobileBeen) {
-                    if (smsSender != null && smsSender.equals(mobileBean.getMobile())) {
+                    if (smsSender != null && smsSender.contains(mobileBean.getMobile())) {
                         EventBus.getDefault().post(new SmsEvent(new SmsBean(date, smsSender, smsBody.toString(), false, "上传中")));
                         return;
                     }

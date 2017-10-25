@@ -13,17 +13,27 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    //签名信息
+    signingConfigs {
+        sign {
+            keyAlias 'lwcye'
+            keyPassword '19881003'
+            storeFile file('../keystore/MyAndroidSignKey.jks')
+            storePassword '19881003'
+        }
+    }
     // 单元测试冲突
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -37,6 +47,16 @@ android {
         daoPackage 'com.gcit.smssend.db.dao'
         targetGenDir 'src/main/java'
     }
+}
+
+static def releaseTime() {
+    def timestamp = new Date().format("yyMMdd", TimeZone.getTimeZone("GMT+8"))
+    return timestamp
+}
+
+android.applicationVariants.all { variant ->
+    def file = variant.outputs[0].outputFile
+    variant.outputs[0].outputFile = new File(file.parent, file.name.replace(".apk", "-" + android.defaultConfig.versionName + "-" + android.defaultConfig.versionCode + "-" + releaseTime() + ".apk"))
 }
 //支持包版本
 def supportVersion = "25.3.1"
@@ -59,7 +79,6 @@ dependencies {
     compile 'com.trello:rxlifecycle-components:1.0'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'com.liulishuo.filedownloader:library:1.4.1'
     // 数据库(greendao)
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'org.greenrobot:eventbus:3.0.0'

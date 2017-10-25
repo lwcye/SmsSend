@@ -13,12 +13,7 @@ import com.gcit.smssend.db.DbWrapper;
 import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.network.RetrofitWrapper;
 import com.gcit.smssend.utils.Logs;
-import com.liulishuo.filedownloader.FileDownloader;
-import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
-import com.liulishuo.filedownloader.services.DownloadMgrInitialParams;
 import com.umeng.analytics.MobclickAgent;
-
-import java.net.Proxy;
 
 
 /**
@@ -77,14 +72,6 @@ public class BaseApp extends Application {
         Logs.init(true, false, 'v', "cqcity");
 
         CrashUtils.init();
-        // 文件下载器
-        FileDownloader.init(this, new DownloadMgrInitialParams.InitCustomMaker()
-                .connectionCreator(new FileDownloadUrlConnection
-                        .Creator(new FileDownloadUrlConnection.Configuration()
-                        .connectTimeout(10_000)
-                        .readTimeout(10_000)
-                        .proxy(Proxy.NO_PROXY)
-                )));
 
         //友盟统计
         MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this, "59eb3c7cf29d98676400000c", "lwcye"));
