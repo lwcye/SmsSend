@@ -45,7 +45,6 @@ public class BaseApp extends Application {
      *
      * @return SPUtils
      */
-
     public static SPUtils getSpUtils() {
         if (null == spUtils) {
             spUtils = SPUtils.getInstance(SharedPrefs.FILE_NAME);
