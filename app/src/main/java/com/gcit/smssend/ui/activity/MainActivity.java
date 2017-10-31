@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import com.gcit.smssend.event.SmsEvent;
 import com.gcit.smssend.network.ApiResult;
 import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.receiver.KeepLiveReceiver;
+import com.gcit.smssend.receiver.SmsObserver;
 import com.gcit.smssend.receiver.SystemReceiver;
 import com.gcit.smssend.service.SmsService;
 import com.gcit.smssend.ui.adapter.RUAdapter;
@@ -95,6 +97,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void call(Boolean aBoolean) {
                         startServiceEx(new Intent(getBaseActivity(), SmsService.class));
+                        new SmsObserver(new Handler(getMainLooper())).registerObserver();
                     }
                 });
     }

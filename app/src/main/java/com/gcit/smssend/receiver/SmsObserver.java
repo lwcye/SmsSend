@@ -8,6 +8,8 @@ import android.provider.Telephony;
 
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.Utils;
+import com.gcit.smssend.base.BaseApp;
+import com.gcit.smssend.constant.SharedPrefs;
 import com.gcit.smssend.utils.Logs;
 
 /**
@@ -31,6 +33,10 @@ public class SmsObserver extends ContentObserver {
     private static final String SMS_INBOX_URI = "content://sms/inbox";//API level>=23,可直接使用Telephony.Sms.Inbox.CONTENT_URI
     private static final String SMS_URI = "content://sms";//API level>=23,可直接使用Telephony.Sms.CONTENT_URI
 
+    public SmsObserver(Handler handler) {
+        super(handler);
+    }
+
     @Override
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
@@ -38,10 +44,6 @@ public class SmsObserver extends ContentObserver {
         Cursor cursor = Utils.getApp().getContentResolver().query(Uri.parse(SMS_INBOX_URI), PROJECTION,
                 Telephony.Sms.READ + "=?", new String[]{"0"}, Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
         getSmsCodeFromObserver(cursor);
-    }
-
-    public SmsObserver(Handler handler) {
-        super(handler);
     }
 
     /**
@@ -61,15 +63,22 @@ public class SmsObserver extends ContentObserver {
         if (cursor == null) {
             return;
         }
+        Logs.e("getSmsCodeFromObserver");
 
+        int count = cursor.getCount();
+        int index = 0;
         while (cursor.moveToNext()) {
             String smsSender = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
             String smsBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
             long id = cursor.getLong(cursor.getColumnIndex(Telephony.Sms._ID));
             String date = TimeUtils.millis2String(cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE)));
-            Logs.e("smsSender", smsSender, "smsBody", smsBody,"id", id,"date", date);
+            Logs.e("smsSender", smsSender, "smsBody", smsBody, "id", id, "date", date);
+            index++;
         }
-
+        Logs.e("count", count);
+        Logs.e("index", index);
+        Logs.e("sp count", BaseApp.getSpUtils().getInt(SharedPrefs.SMS_OBSERVER_COUNT));
+        BaseApp.getSpUtils().put(SharedPrefs.SMS_OBSERVER_COUNT, count);
         closeCursor(cursor);
     }
 

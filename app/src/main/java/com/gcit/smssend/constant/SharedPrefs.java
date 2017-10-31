@@ -16,6 +16,8 @@ public class SharedPrefs {
     public static final String FILE_NAME = "base_config";
     /** smsService是否存货 **/
     public static final String isSmsServiceKeepLive = "isSmsServiceKeepLive";
+    /** smsObserver的数量 **/
+    public static final String SMS_OBSERVER_COUNT = "smsObserverCount";
     /** 号码设置的key ,以,分割 **/
     public static final String MOBILE_LIST = "mobileList";
 }
