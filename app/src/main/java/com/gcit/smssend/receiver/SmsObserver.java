@@ -80,20 +80,19 @@ public class SmsObserver extends ContentObserver {
                 String smsSender = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
                 String smsBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
                 long date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE));
+                
                 long timeSpanByNow = TimeUtils.getTimeSpanByNow(date, TimeConstants.DAY);
-                Logs.e(TimeUtils.millis2String(date), "   相差:" + timeSpanByNow);
                 if (timeSpanByNow < 5) {
                     //过滤5天以上的数据
                     if (filterPhoneNum(smsSender, mobileBeen)) {
                         //过滤设置的短信号码,默认全部上传
                         if (!DbWrapper.isSaved(date)) {
-                            Logs.e("不存在", TimeUtils.millis2String(date));
                             //成功短信的数据库不存在,就发送出去
                             EventBus.getDefault().post(new SmsEvent(new SmsBean(date, smsSender, smsBody, false, "上传中")));
-                        } else {
-                            Logs.e("存在", TimeUtils.millis2String(date));
                         }
                     }
+                } else {
+                    break;
                 }
             }
             BaseApp.getSpUtils().put(SharedPrefs.SMS_OBSERVER_COUNT, count);
