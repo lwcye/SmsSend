@@ -4,11 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.gcit.smssend.db.bean.SuccessSmsBean;
 import com.gcit.smssend.db.dao.DaoMaster;
 import com.gcit.smssend.db.dao.DaoSession;
 import com.gcit.smssend.db.dao.MobileBeanDao;
-import com.gcit.smssend.db.dao.SmsModelDao;
+import com.gcit.smssend.db.dao.SmsBeanDao;
+import com.gcit.smssend.db.dao.SuccessSmsBeanDao;
 import com.gcit.smssend.utils.MigrationHelper;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 /**
  * <p>describe</p><br>
@@ -24,14 +28,14 @@ import com.gcit.smssend.utils.MigrationHelper;
 public class DbWrapper {
     /** 数据库名称 */
     public static final String DB_NAME = "app.db";
-
+    
     /** 数据库帮助类 */
     private static AppOpenHelper mHelper;
     /** Dao管理 */
     private static DaoMaster mDaoMaster;
     /** Dao会话 */
     private static DaoSession mDaoSession;
-
+    
     /**
      * 初始化函数
      *
@@ -43,7 +47,7 @@ public class DbWrapper {
         mDaoMaster = new DaoMaster(mHelper.getWritableDatabase());
         mDaoSession = mDaoMaster.newSession();
     }
-
+    
     /**
      * 获取会话
      *
@@ -52,7 +56,7 @@ public class DbWrapper {
     public static DaoSession getSession() {
         return mDaoSession;
     }
-
+    
     /**
      * 重庆城支撑库数据库
      */
@@ -66,7 +70,7 @@ public class DbWrapper {
         public AppOpenHelper(Context context, String name) {
             super(context, name);
         }
-
+        
         /**
          * 构造函数
          *
@@ -77,15 +81,28 @@ public class DbWrapper {
         public AppOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
             super(context, name, factory);
         }
-
+        
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             super.onUpgrade(db, oldVersion, newVersion);
-
+            
             LogUtils.d("upgrade db(" + DB_NAME + ") from " + oldVersion + " to " + newVersion);
-
+            
             // 升级数据库
-            MigrationHelper.migrate(db, SmsModelDao.class, MobileBeanDao.class);
+            MigrationHelper.migrate(db, SmsBeanDao.class, MobileBeanDao.class, SuccessSmsBeanDao.class);
         }
+    }
+    
+    /**
+     * 查询是否存在某个id
+     *
+     * @param id id
+     * @return true 存在, false-不存在
+     */
+    public static boolean isSaved(long id) {
+        QueryBuilder<SuccessSmsBean> qb = DbWrapper.getSession().getSuccessSmsBeanDao().queryBuilder();
+        qb.where(SuccessSmsBeanDao.Properties.Create_time.eq(id));
+        qb.buildCount().count();
+        return qb.buildCount().count() > 0;
     }
 }

@@ -6,6 +6,7 @@
 	<color name="black_title">#333333</color>
 	<color name="black_hint">#999999</color>
 	<color name="white">#fff</color>
+	<color name="transparent">#0000</color>
 
 	
 	<!--灰阶-->

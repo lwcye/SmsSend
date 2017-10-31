@@ -31,15 +31,14 @@ import java.util.List;
  */
 public class SmsReceiver extends BaseReceiver {
     private static final String SMS_RECEIVED_ACTION = Telephony.Sms.Intents.SMS_RECEIVED_ACTION;// 接收到短信时的action
-
+    
     @Override
     public void onReceive(Context context, Intent intent, int flag) {
         if (intent.getAction().equals(SMS_RECEIVED_ACTION)) {
             getSmsCodeFromReceiver(intent);
-
         }
     }
-
+    
     /**
      * 包访问级别:提高性能
      * 从接收者中得到短信验证码
@@ -59,7 +58,7 @@ public class SmsReceiver extends BaseReceiver {
                 return;
             }
         }
-
+        
         if (messages.length > 0) {
             String smsSender = null;
             StringBuilder smsBody = new StringBuilder();
@@ -71,13 +70,13 @@ public class SmsReceiver extends BaseReceiver {
                 }
                 smsBody.append(messages[0].getMessageBody());
             }
-
+            
             //过滤号码
             List<MobileBean> mobileBeen = DbWrapper.getSession().getMobileBeanDao().loadAll();
             if (mobileBeen != null && mobileBeen.size() > 0) {
                 for (MobileBean mobileBean : mobileBeen) {
                     if (smsSender != null && smsSender.contains(mobileBean.getMobile())) {
-                        EventBus.getDefault().post(new SmsEvent(new SmsBean(date, smsSender, smsBody.toString(), false, "上传中")));
+                        EventBus.getDefault().post(new SmsEvent(new SmsBean(date,smsSender, smsBody.toString(), false, "上传中")));
                         return;
                     }
                 }
@@ -86,18 +85,18 @@ public class SmsReceiver extends BaseReceiver {
             }
         }
     }
-
+    
     @Nullable
     private SmsMessage[] getSmsUnder19(Intent intent) {
         SmsMessage[] messages;
         Bundle bundle = intent.getExtras();
         // 相关链接:https://developer.android.com/reference/android/provider/Telephony.Sms.Intents.html#SMS_DELIVER_ACTION
         Object[] pdus = (Object[]) bundle.get("pdus");
-
+        
         if ((pdus == null) || (pdus.length == 0)) {
             return null;
         }
-
+        
         messages = new SmsMessage[pdus.length];
         for (int i = 0; i < pdus.length; i++) {
             messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);

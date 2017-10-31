@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context="com.gcit.smssend.ui.activity.DbActivity">
+	
+	<LinearLayout
+		android:id="@+id/ll_db_count"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/view_height"
+		android:background="?android:selectableItemBackground"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="@dimen/view_height"
+			android:layout_weight="1"
+			android:gravity="center_vertical"
+			android:paddingLeft="@dimen/text_size_normal"
+			android:text="数据库现有条数" />
+		
+		<TextView
+			android:id="@+id/tv_db_count"
+			android:layout_width="wrap_content"
+			android:layout_height="@dimen/view_height"
+			android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+			android:gravity="center"
+			android:paddingRight="@dimen/text_size_normal" />
+	</LinearLayout>
+	
+	<Button
+		android:id="@+id/btn_db_clone"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/view_height"
+		android:layout_margin="@dimen/margin_large"
+		android:background="@color/colorPrimary"
+		android:text="清除数据库"
+		android:textColor="@color/white" />
+</LinearLayout>

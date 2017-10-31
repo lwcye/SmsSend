@@ -5,7 +5,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * <p>describe</p><br>
+ * <p>发送失败的短信</p><br>
  *
  * @author - lwc
  * @date - 2017/10/24
@@ -17,14 +17,13 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class SmsBean {
-    @Id
-    private Long create_time;
+    @Id private long create_time;
     private String mobile;
     private String content;
     private boolean isSuccess;
     private String errorMsg;
-    @Generated(hash = 1825234865)
-    public SmsBean(Long create_time, String mobile, String content, boolean isSuccess,
+    @Generated(hash = 899343996)
+    public SmsBean(long create_time, String mobile, String content, boolean isSuccess,
             String errorMsg) {
         this.create_time = create_time;
         this.mobile = mobile;
@@ -65,5 +64,8 @@ public class SmsBean {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
-    
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
+   
 }

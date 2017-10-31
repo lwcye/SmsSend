@@ -25,6 +25,7 @@ import com.gcit.smssend.base.BaseApp;
 import com.gcit.smssend.constant.ENVs;
 import com.gcit.smssend.db.DbWrapper;
 import com.gcit.smssend.db.bean.SmsBean;
+import com.gcit.smssend.db.bean.SuccessSmsBean;
 import com.gcit.smssend.event.ServiceEvent;
 import com.gcit.smssend.event.SmsEvent;
 import com.gcit.smssend.network.ApiResult;
@@ -75,33 +76,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView mTvStatus;
     /** 是否需要退出 */
     private boolean mIsExit = false;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
         initData();
-
+        
         keepService();
         register();
     }
-
+    
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (mAdapter != null && mList != null) {
+            mList.clear();
+            mAdapter.setData(mList);
+        }
+    }
+    
     /**
      * 开启服务
      */
     private void keepService() {
         RxPermissions permissions = new RxPermissions(getBaseActivity());
         permissions.request(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS)
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        startServiceEx(new Intent(getBaseActivity(), SmsService.class));
-                        new SmsObserver(new Handler(getMainLooper())).registerObserver();
-                    }
-                });
+            .subscribe(new Action1<Boolean>() {
+                @Override
+                public void call(Boolean aBoolean) {
+                    startServiceEx(new Intent(getBaseActivity(), SmsService.class));
+                    new SmsObserver(new Handler(getMainLooper())).registerObserver();
+                }
+            });
     }
-
+    
     /**
      * 注册
      */
@@ -123,15 +133,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             registerReceiver(mSystemReceiver, filter);
         }
     }
-
-
+    
+    
     private void initView() {
         mBtnStatus = (Button) findViewById(R.id.btn_status);
         mBtnStatus.setOnClickListener(this);
         mRvMain = (RecyclerView) findViewById(R.id.rv_main);
         mTvStatus = (TextView) findViewById(R.id.tv_status);
     }
-
+    
     private void initData() {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -159,41 +169,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mRvMain.setItemAnimator(new DefaultItemAnimator());
         mRvMain.setAdapter(mAdapter);
     }
-
+    
     private void requestSms(final SmsBean data, final int index) {
         HttpUtils.getSmsInfoService().smspost(String.valueOf(data.getCreate_time() / 1000), data.getMobile(), data.getContent())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        DbWrapper.getSession().getSmsBeanDao().insert(data);
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .doOnNext(new Action1<ApiResult>() {
-                    @Override
-                    public void call(ApiResult apiResult) {
-                        data.setIsSuccess(true);
-                        DbWrapper.getSession().getSmsBeanDao().delete(data);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ApiResult>() {
-                    @Override
-                    public void call(ApiResult apiResult) {
-                        mAdapter.notifyItemChanged(index);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        data.setIsSuccess(false);
-                        data.setErrorMsg(getString(R.string.error_network));
-                        mAdapter.notifyItemChanged(index);
-                    }
-                });
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .doOnError(new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    DbWrapper.getSession().getSmsBeanDao().insert(data);
+                }
+            })
+            .observeOn(Schedulers.io())
+            .doOnNext(new Action1<ApiResult>() {
+                @Override
+                public void call(ApiResult apiResult) {
+                    data.setIsSuccess(true);
+                    DbWrapper.getSession().getSmsBeanDao().delete(data);
+                    DbWrapper.getSession().getSuccessSmsBeanDao().insertOrReplace(new SuccessSmsBean(data.getCreate_time(), data.getMobile(), data.getContent()));
+                }
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<ApiResult>() {
+                @Override
+                public void call(ApiResult apiResult) {
+                    mAdapter.notifyItemChanged(index);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    data.setIsSuccess(false);
+                    data.setErrorMsg(getString(R.string.error_network));
+                    mAdapter.notifyItemChanged(index);
+                }
+            });
     }
-
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -205,7 +216,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             unregisterReceiver(mSystemReceiver);
         }
     }
-
+    
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(SmsEvent smsEvent) {
         if (!mList.contains(smsEvent.mSmsBean)) {
@@ -216,12 +227,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             mAdapter.addDataLast(smsEvent.mSmsBean);
         }
     }
-
+    
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(ServiceEvent serviceEvent) {
         resetState(serviceEvent.isKeepLive);
     }
-
+    
     /**
      * 重新设置状态
      *
@@ -236,14 +247,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             mBtnStatus.setText("开启");
         }
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(getString(R.string.activity_mobile));
         menu.add(getString(R.string.activity_error));
+        menu.add(getString(R.string.activity_db));
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getString(R.string.activity_mobile).equals(item.getTitle())) {
@@ -254,10 +266,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             ErrorActivity.start(getContext());
             return super.onOptionsItemSelected(item);
         }
+        if (getString(R.string.activity_db).equals(item.getTitle())) {
+            DbActivity.start(getContext());
+            return super.onOptionsItemSelected(item);
+        }
         return super.onOptionsItemSelected(item);
     }
-
-
+    
+    
     @Override
     public void onBackPressed() {
         if (mIsExit) {
@@ -266,17 +282,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             mIsExit = true;
             ToastUtils.showShort(getString(R.string.exit_if_again));
             Observable.timer(ENVs.BACK_TO_EXIT_INTERVAL, TimeUnit.SECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe(new Action1<Long>() {
-                        @Override
-                        public void call(Long aLong) {
-                            mIsExit = false;
-                        }
-                    });
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        mIsExit = false;
+                    }
+                });
         }
     }
-
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -291,7 +307,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
         }
     }
-
+    
     @Override
     public void onItemClick(View view, int itemType, final int position) {
         final SmsBean smsBean = mList.get(position);
