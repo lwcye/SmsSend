@@ -47,7 +47,7 @@ public class DbDetailActivity extends BaseActivity {
             @Override
             protected void onInflateData(RUViewHolder holder, SuccessSmsBean data, int position) {
                 holder.setText(R.id.tv_item_main_moblie, data.getMobile());
-                holder.setText(R.id.tv_item_main_content, "\t\t\t\t" + data.getContent());
+                holder.setText(R.id.tv_item_main_content, "\t\t\t" + data.getContent());
                 holder.setText(R.id.tv_item_main_date, TimeUtils.millis2String(data.getCreate_time()));
             }
         };

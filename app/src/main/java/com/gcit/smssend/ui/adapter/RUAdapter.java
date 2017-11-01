@@ -150,6 +150,16 @@ public abstract class RUAdapter<T> extends RecyclerView.Adapter {
     }
     
     /**
+     * 在数据尾部添加数据
+     *
+     * @param item 子数据
+     */
+    public void addDataFirst(T item) {
+        mData.add(1, item);
+        notifyItemInserted(1);
+    }
+    
+    /**
      * 在指定位置删除数据
      *
      * @param position 索引位置

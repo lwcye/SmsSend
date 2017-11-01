@@ -20,7 +20,7 @@
 			android:layout_weight="1"
 			android:gravity="center_vertical"
 			android:paddingLeft="@dimen/text_size_normal"
-			android:text="数据库现有条数" />
+			android:text="上传成功条数" />
 		
 		<TextView
 			android:id="@+id/tv_db_count"
@@ -37,6 +37,6 @@
 		android:layout_height="@dimen/view_height"
 		android:layout_margin="@dimen/margin_large"
 		android:background="@color/colorPrimary"
-		android:text="清除数据库"
+		android:text="清除记录"
 		android:textColor="@color/white" />
 </LinearLayout>

@@ -1,12 +1,9 @@
-package com.gcit.smssend.ui.activity;
+package com.gcit.smssend.feature.main;
 
-import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,34 +17,25 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gcit.smssend.R;
-import com.gcit.smssend.base.BaseActivity;
-import com.gcit.smssend.base.BaseApp;
 import com.gcit.smssend.constant.ENVs;
-import com.gcit.smssend.db.DbWrapper;
 import com.gcit.smssend.db.bean.SmsBean;
-import com.gcit.smssend.db.bean.SuccessSmsBean;
 import com.gcit.smssend.event.ServiceEvent;
 import com.gcit.smssend.event.SmsEvent;
-import com.gcit.smssend.network.ApiResult;
-import com.gcit.smssend.network.HttpUtils;
-import com.gcit.smssend.receiver.KeepLiveReceiver;
-import com.gcit.smssend.receiver.SmsObserver;
-import com.gcit.smssend.receiver.SystemReceiver;
-import com.gcit.smssend.service.SmsService;
+import com.gcit.smssend.mvp.MVPBaseActivity;
+import com.gcit.smssend.ui.activity.DbActivity;
+import com.gcit.smssend.ui.activity.ErrorActivity;
+import com.gcit.smssend.ui.activity.MobileActivity;
 import com.gcit.smssend.ui.adapter.RUAdapter;
 import com.gcit.smssend.ui.adapter.RUViewHolder;
-import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -62,20 +50,19 @@ import rx.schedulers.Schedulers;
  * @date -
  * @note -
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener, RUAdapter.OnItemClickListener {
-    /** 监听锁频的广播 */
-    KeepLiveReceiver mKeepLiveReceiver = new KeepLiveReceiver();
-    /** 监听系统的广播 */
-    SystemReceiver mSystemReceiver = new SystemReceiver();
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View, View.OnClickListener, RUAdapter.OnItemClickListener {
     /** 开启短信转发 */
     private Button mBtnStatus;
     private RecyclerView mRvMain;
     private RUAdapter<SmsBean> mAdapter;
-    private List<SmsBean> mList;
     /** 当前状态：开启 */
     private TextView mTvStatus;
     /** 是否需要退出 */
     private boolean mIsExit = false;
+    /** 批量上传 */
+    private Button mBtnPostList;
+    /** 加载动画 */
+    private ProgressDialog mProgressDialog;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,55 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         initView();
         initData();
-        
-        keepService();
-        register();
-    }
-    
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (mAdapter != null && mList != null) {
-            mList.clear();
-            mAdapter.setData(mList);
-        }
-    }
-    
-    /**
-     * 开启服务
-     */
-    private void keepService() {
-        RxPermissions permissions = new RxPermissions(getBaseActivity());
-        permissions.request(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS)
-            .subscribe(new Action1<Boolean>() {
-                @Override
-                public void call(Boolean aBoolean) {
-                    startServiceEx(new Intent(getBaseActivity(), SmsService.class));
-                    new SmsObserver(new Handler(getMainLooper())).registerObserver();
-                }
-            });
-    }
-    
-    /**
-     * 注册
-     */
-    private void register() {
-        //注册监听锁屏广播
-        if (mKeepLiveReceiver != null) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_USER_PRESENT);
-            registerReceiver(mKeepLiveReceiver, filter);
-        }
-        //注册监听锁屏广播
-        if (mSystemReceiver != null) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_USER_PRESENT);
-            registerReceiver(mSystemReceiver, filter);
-        }
+        mPresenter.keepService();
     }
     
     
@@ -140,18 +79,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mBtnStatus.setOnClickListener(this);
         mRvMain = (RecyclerView) findViewById(R.id.rv_main);
         mTvStatus = (TextView) findViewById(R.id.tv_status);
+        mBtnPostList = (Button) findViewById(R.id.btn_post_list);
+        mBtnPostList.setOnClickListener(this);
     }
     
     private void initData() {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        mList = new ArrayList<>();
-        mAdapter = new RUAdapter<SmsBean>(getContext(), mList, R.layout.item_main) {
+        mAdapter = new RUAdapter<SmsBean>(getContext(), mPresenter.mSmsList, R.layout.item_main) {
             @Override
             protected void onInflateData(RUViewHolder holder, SmsBean data, int position) {
                 holder.setText(R.id.tv_item_main_moblie, data.getMobile());
-                holder.setText(R.id.tv_item_main_content, "\t\t\t\t" + data.getContent());
+                holder.setText(R.id.tv_item_main_content, "\t\t\t" + data.getContent());
                 holder.setText(R.id.tv_item_main_date, TimeUtils.millis2String(data.getCreate_time()));
                 TextView tvState = holder.getViewById(R.id.tv_item_main_state);
                 if (data.getIsSuccess()) {
@@ -160,7 +100,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 } else {
                     tvState.setText(data.getErrorMsg());
                     tvState.setTextColor(Color.RED);
-                    requestSms(data, position);
+                    mPresenter.requestPostSms(position);
                 }
             }
         };
@@ -170,61 +110,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mRvMain.setAdapter(mAdapter);
     }
     
-    private void requestSms(final SmsBean data, final int index) {
-        HttpUtils.getSmsInfoService().smspost(String.valueOf(data.getCreate_time() / 1000), data.getMobile(), data.getContent())
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .doOnError(new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    DbWrapper.getSession().getSmsBeanDao().insert(data);
-                }
-            })
-            .observeOn(Schedulers.io())
-            .doOnNext(new Action1<ApiResult>() {
-                @Override
-                public void call(ApiResult apiResult) {
-                    data.setIsSuccess(true);
-                    DbWrapper.getSession().getSmsBeanDao().delete(data);
-                    DbWrapper.getSession().getSuccessSmsBeanDao().insertOrReplace(new SuccessSmsBean(data.getCreate_time(), data.getMobile(), data.getContent()));
-                }
-            })
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<ApiResult>() {
-                @Override
-                public void call(ApiResult apiResult) {
-                    mAdapter.notifyItemChanged(index);
-                }
-            }, new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    data.setIsSuccess(false);
-                    data.setErrorMsg(getString(R.string.error_network));
-                    mAdapter.notifyItemChanged(index);
-                }
-            });
-    }
-    
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (mKeepLiveReceiver != null) {
-            unregisterReceiver(mKeepLiveReceiver);
-        }
-        if (mSystemReceiver != null) {
-            unregisterReceiver(mSystemReceiver);
-        }
+    }
+    
+    @Override
+    protected MainPresenter createPresenter() {
+        return new MainPresenter();
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(SmsEvent smsEvent) {
-        if (!mList.contains(smsEvent.mSmsBean)) {
+        if (!mPresenter.mSmsList.contains(smsEvent.mSmsBean)) {
             if (mAdapter.getItemCount() > 100) {
-                mList.clear();
-                mAdapter.setData(mList);
+                mPresenter.mSmsList.clear();
+                mAdapter.setData(mPresenter.mSmsList);
             }
-            mAdapter.addDataLast(smsEvent.mSmsBean);
+            mAdapter.addDataFirst(smsEvent.mSmsBean);
         }
     }
     
@@ -240,11 +144,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     private void resetState(boolean isKeepLive) {
         if (isKeepLive) {
-            mTvStatus.setText("当前状态：开启");
-            mBtnStatus.setText("退出");
+            mTvStatus.setText("已开启");
         } else {
-            mTvStatus.setText("当前状态：关闭");
-            mBtnStatus.setText("开启");
+            mTvStatus.setText("已关闭");
         }
     }
     
@@ -297,11 +199,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status:
-                if (BaseApp.getInstance().isKeepLive) {
-                    onBackPressed();
-                } else {
-                    keepService();
-                }
+                mPresenter.mSmsList.clear();
+                mAdapter.setData(mPresenter.mSmsList);
+                mPresenter.loadSmsData();
+                showLoading("导入数据中");
+                break;
+            case R.id.btn_post_list:
+                showLoading("上传数据中");
+                mPresenter.requestPostSmsList();
                 break;
             default:
                 break;
@@ -310,7 +215,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     
     @Override
     public void onItemClick(View view, int itemType, final int position) {
-        final SmsBean smsBean = mList.get(position);
+        final SmsBean smsBean = mPresenter.mSmsList.get(position);
         if (smsBean.getIsSuccess()) {
             return;
         }
@@ -320,7 +225,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         builder.setPositiveButton("上传", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                requestSms(smsBean, position);
+                mPresenter.requestPostSms(position);
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -330,5 +235,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
         builder.create().show();
+    }
+    
+    @Override
+    public void responseSmsData(List<SmsBean> smsBeen) {
+        hideLoading();
+        mTvStatus.setText("已显示" + smsBeen.size() + "条");
+        mAdapter.setData(smsBeen);
+    }
+    
+    @Override
+    public void responseSmsPost() {
+        mAdapter.notifyDataSetChanged();
+        mTvStatus.setText("已显示" + mAdapter.getItemCount() + "条");
+    }
+    
+    @Override
+    public void responseSmsListPost() {
+        hideLoading();
+        ToastUtils.showShort("完成上传");
+        mAdapter.notifyDataSetChanged();
     }
 }

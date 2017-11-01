@@ -15,6 +15,7 @@
 	<dimen name="margin_large">20dp</dimen>
 	<dimen name="margin_normal">16dp</dimen>
 	<dimen name="margin_small">12dp</dimen>
+	<dimen name="margin_tiny">8dp</dimen>
 	<!-- text -->
 	<dimen name="t10">10sp</dimen>
 	<dimen name="t12">12sp</dimen>
