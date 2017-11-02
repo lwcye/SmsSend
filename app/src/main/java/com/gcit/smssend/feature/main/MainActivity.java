@@ -1,6 +1,5 @@
 package com.gcit.smssend.feature.main;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +26,8 @@ import com.gcit.smssend.ui.activity.ErrorActivity;
 import com.gcit.smssend.ui.activity.MobileActivity;
 import com.gcit.smssend.ui.adapter.RUAdapter;
 import com.gcit.smssend.ui.adapter.RUViewHolder;
+import com.gcit.smssend.ui.widget.SimpleCalendarDialogFragment;
+import com.gcit.smssend.utils.Logs;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,9 +62,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private boolean mIsExit = false;
     /** 批量上传 */
     private Button mBtnPostList;
-    /** 加载动画 */
-    private ProgressDialog mProgressDialog;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +71,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initData();
         mPresenter.keepService();
     }
-    
-    
+
+
     private void initView() {
         mBtnStatus = (Button) findViewById(R.id.btn_status);
         mBtnStatus.setOnClickListener(this);
@@ -82,7 +81,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mBtnPostList = (Button) findViewById(R.id.btn_post_list);
         mBtnPostList.setOnClickListener(this);
     }
-    
+
     private void initData() {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
@@ -109,18 +108,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mRvMain.setItemAnimator(new DefaultItemAnimator());
         mRvMain.setAdapter(mAdapter);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    
+
     @Override
     protected MainPresenter createPresenter() {
         return new MainPresenter();
     }
-    
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(SmsEvent smsEvent) {
         if (!mPresenter.mSmsList.contains(smsEvent.mSmsBean)) {
@@ -131,12 +130,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             mAdapter.addDataFirst(smsEvent.mSmsBean);
         }
     }
-    
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(ServiceEvent serviceEvent) {
         resetState(serviceEvent.isKeepLive);
     }
-    
+
     /**
      * 重新设置状态
      *
@@ -149,7 +148,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             mTvStatus.setText("已关闭");
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(getString(R.string.activity_mobile));
@@ -157,7 +156,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         menu.add(getString(R.string.activity_db));
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getString(R.string.activity_mobile).equals(item.getTitle())) {
@@ -174,8 +173,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    
+
+
     @Override
     public void onBackPressed() {
         if (mIsExit) {
@@ -184,25 +183,32 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             mIsExit = true;
             ToastUtils.showShort(getString(R.string.exit_if_again));
             Observable.timer(ENVs.BACK_TO_EXIT_INTERVAL, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        mIsExit = false;
-                    }
-                });
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Action1<Long>() {
+                        @Override
+                        public void call(Long aLong) {
+                            mIsExit = false;
+                        }
+                    });
         }
     }
-    
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status:
                 mPresenter.mSmsList.clear();
                 mAdapter.setData(mPresenter.mSmsList);
-                mPresenter.loadSmsData();
-                showLoading("导入数据中");
+                SimpleCalendarDialogFragment simpleCalendarDialogFragment = new SimpleCalendarDialogFragment();
+                simpleCalendarDialogFragment.setListener(new SimpleCalendarDialogFragment.OnSureListener() {
+                    @Override
+                    public void sureListener(long date) {
+                        mPresenter.loadSmsData(date);
+                        showLoading("导入数据中");
+                    }
+                });
+                simpleCalendarDialogFragment.show(getSupportFragmentManager(), "simple-calendar");
                 break;
             case R.id.btn_post_list:
                 showLoading("上传数据中");
@@ -212,7 +218,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
         }
     }
-    
+
     @Override
     public void onItemClick(View view, int itemType, final int position) {
         final SmsBean smsBean = mPresenter.mSmsList.get(position);
@@ -236,20 +242,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         });
         builder.create().show();
     }
-    
+
     @Override
     public void responseSmsData(List<SmsBean> smsBeen) {
         hideLoading();
         mTvStatus.setText("已显示" + smsBeen.size() + "条");
         mAdapter.setData(smsBeen);
     }
-    
+
     @Override
     public void responseSmsPost() {
         mAdapter.notifyDataSetChanged();
         mTvStatus.setText("已显示" + mAdapter.getItemCount() + "条");
     }
-    
+
     @Override
     public void responseSmsListPost() {
         hideLoading();

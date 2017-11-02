@@ -93,6 +93,7 @@ public static final int *;
 
 # libdev-common
 -keep class com.cqmc.opsrc.blankj.utilcode.util.LogUtils { *; }
+-keep class com.gcit.smssend.utils.Logs { *; }
 -keepclassmembers class com.gcit.smssend.db.bean.** {*;}
 -keepclassmembers class * extends com.gcit.smssend.network.ApiResult {*;}
 

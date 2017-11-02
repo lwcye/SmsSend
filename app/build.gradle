@@ -11,8 +11,9 @@ android {
         //2017.10.26  1-1.0.0 第一个版本
         //2017.10.31  2-1.0.1 改成观察者模式,监听每一条短信
         //2017.11.1  3-1.0.2 大改,特别是短息的查询
-        versionCode 3
-        versionName "1.0.2"
+        //2017.11.2  4-1.0.3 增加日历选择
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -87,5 +88,6 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
     testCompile 'junit:junit:4.12'
 }

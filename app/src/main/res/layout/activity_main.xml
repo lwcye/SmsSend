@@ -29,7 +29,7 @@
 			android:layout_margin="@dimen/margin_small"
 			android:background="@drawable/selector_btn"
 			android:padding="@dimen/margin_small"
-			android:text="查询五天内短信"
+			android:text="查询短信"
 			android:textColor="@color/white"
 			android:textSize="@dimen/t12" />
 		

@@ -21,7 +21,7 @@ public class MainContract {
     }
     
     interface Presenter extends BasePresenter<View> {
-        void loadSmsData();
+        void loadSmsData(long selectorDate);
         
         void keepService();
         
