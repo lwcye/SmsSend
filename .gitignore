@@ -7,3 +7,4 @@
 /captures
 .externalNativeBuild
 app/src/main/java/com/gcit/smssend/db/dao/
+.keystore
