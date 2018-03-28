@@ -5,7 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.gcit.smssend"
+        applicationId "com.tencent.mobileqq"
         minSdkVersion 14
         targetSdkVersion 25
         //2017.10.26  1-1.0.0 第一个版本
@@ -90,4 +90,5 @@ dependencies {
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     testCompile 'junit:junit:4.12'
+    compile 'com.xdandroid:hellodaemon:+'
 }

@@ -1,8 +1,10 @@
 package com.gcit.smssend.feature.main;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gcit.smssend.R;
@@ -27,7 +30,7 @@ import com.gcit.smssend.ui.activity.MobileActivity;
 import com.gcit.smssend.ui.adapter.RUAdapter;
 import com.gcit.smssend.ui.adapter.RUViewHolder;
 import com.gcit.smssend.ui.widget.SimpleCalendarDialogFragment;
-import com.gcit.smssend.utils.Logs;
+import com.xdandroid.hellodaemon.IntentWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +73,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initView();
         initData();
         mPresenter.keepService();
+
+        //修改系统默认短信应用
+        String defaultSmsApp = null;
+        String currentPn = getPackageName();//获取当前程序包名
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this);//获取手机当前设置的默认短信应用的包名
+        }
+        LogUtils.e(defaultSmsApp);
+        if (!defaultSmsApp.equals(currentPn)) {
+            Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, currentPn);
+            startActivity(intent);
+        }
     }
 
 
@@ -179,6 +195,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onBackPressed() {
         if (mIsExit) {
             finish();
+            IntentWrapper.onBackPressed(this);
         } else {
             mIsExit = true;
             ToastUtils.showShort(getString(R.string.exit_if_again));
@@ -198,6 +215,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_status:
+                IntentWrapper.whiteListMatters(this, "轨迹跟踪服务的持续运行");
                 mPresenter.mSmsList.clear();
                 mAdapter.setData(mPresenter.mSmsList);
                 SimpleCalendarDialogFragment simpleCalendarDialogFragment = new SimpleCalendarDialogFragment();

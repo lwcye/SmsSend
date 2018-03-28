@@ -12,8 +12,10 @@ import com.gcit.smssend.constant.URLs;
 import com.gcit.smssend.db.DbWrapper;
 import com.gcit.smssend.network.HttpUtils;
 import com.gcit.smssend.network.RetrofitWrapper;
+import com.gcit.smssend.service.WorkService;
 import com.gcit.smssend.utils.Logs;
 import com.umeng.analytics.MobclickAgent;
+import com.xdandroid.hellodaemon.DaemonEnv;
 
 
 /**
@@ -83,6 +85,12 @@ public class BaseApp extends Application {
 
         //db
         DbWrapper.init(this);
+
+        //保活 helloDemon
+        //需要在 Application 的 onCreate() 中调用一次 DaemonEnv.initialize()
+        DaemonEnv.initialize(this, WorkService.class, DaemonEnv.DEFAULT_WAKE_UP_INTERVAL);
+        WorkService.sShouldStopService = false;
+        DaemonEnv.startServiceMayBind(WorkService.class);
     }
 
     @Override

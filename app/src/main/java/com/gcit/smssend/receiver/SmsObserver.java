@@ -50,7 +50,7 @@ public class SmsObserver extends ContentObserver {
     public static final String SMS_URI = "content://sms";//API level>=23,可直接使用Telephony.Sms.CONTENT_URI
     Subscription subscribe;
     
-    public SmsObserver(Handler handler) {
+    public  SmsObserver(Handler handler) {
         super(handler);
     }
     
