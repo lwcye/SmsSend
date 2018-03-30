@@ -19,9 +19,13 @@ import okhttp3.Interceptor;
  * @note -
  */
 public class HttpUtils {
-    /** 统计服务URL */
+    /**
+     * 统计服务URL
+     */
     private static SmsInfoService sSmsInfoService;
-    /** 统计服务URL */
+    /**
+     * 统计服务URL
+     */
     private static String sUrl = "";
 
     /**
@@ -31,6 +35,15 @@ public class HttpUtils {
      */
     public static void setUrl(String url) {
         sUrl = url;
+        sSmsInfoService = null;
+    }
+
+    /**
+     * 设置统计服务的URL
+     *
+     */
+    public static String getUrl() {
+        return sUrl;
     }
 
     /**

@@ -10,4 +10,6 @@
 	<string name="please_input_mobile">请输入号码</string>
 	<string name="add">新增</string>
 	<string name="error_network">网络错误</string>
+	<string name="please_input_url">请输入链接</string>
+	<string name="setting">设置</string>
 </resources>
