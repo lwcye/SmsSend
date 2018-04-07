@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_bar" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/x20"
+        android:layout_marginTop="@dimen/x20">
+
+        <android.support.v4.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_sms_query"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x36"
+            android:background="@drawable/shape_btn"
+            android:elevation="@dimen/x5"
+            android:text="查询短信"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_sms_upload"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x36"
+            android:background="@drawable/shape_btn"
+            android:elevation="@dimen/x5"
+            android:text="批量上传"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置号码接受短信90条\n上传成功70条\n上传失败10条" />
+
+</android.support.v7.widget.LinearLayoutCompat>

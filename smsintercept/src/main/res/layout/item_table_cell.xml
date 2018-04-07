@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/cell_linlay">
+
+    <TextView
+        android:id="@+id/tv_cell_left"
+        style="@style/cell_text_left"
+        tools:text="left" />
+
+    <TextView
+        android:id="@+id/tv_cell_right"
+        style="@style/cell_text_right"
+        tools:text="right" />
+</LinearLayout>

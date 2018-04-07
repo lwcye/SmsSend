@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">smsIntercept</string>
+    <string name="sms">短信</string>
+    <string name="home">首页</string>
+    <string name="setting">设置</string>
+    <string name="status_connect">已连接</string>
+    <string name="status_connect_error">错误</string>
+    <string name="network">网络：</string>
+    <string name="service">服务器：</string>
 </resources>

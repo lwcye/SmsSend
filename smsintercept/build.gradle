@@ -55,4 +55,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    // 沉浸式状态栏(status bar util)
+    compile 'com.jaeger.statusbaruitl:library:1.3.5'
 }

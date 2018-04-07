@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x12"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_home_top" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x5">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/service"
+                android:textColor="@color/black_content"
+                android:textSize="@dimen/t16" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_home_status_service"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_tick"
+                android:drawablePadding="@dimen/x5"
+                android:text="@string/status_connect"
+                android:textColor="@color/black"
+                android:textSize="@dimen/t16" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x5">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/network"
+                android:textColor="@color/black_content"
+                android:textSize="@dimen/t16" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_home_status_network"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_tick"
+                android:drawablePadding="@dimen/x5"
+                android:text="@string/status_connect"
+                android:textColor="@color/black"
+                android:textSize="@dimen/t16" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x12"
+            android:text="最新短信更新时间"
+            android:textColor="@color/black_content"
+            android:textSize="@dimen/t16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_home_sms_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x12"
+            android:text="最新短信更新时间"
+            android:textColor="@color/black_content"
+            android:textSize="@dimen/t16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x12"
+            android:text="最近短信同步时间"
+            android:textColor="@color/black_content"
+            android:textSize="@dimen/t16" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_home_sms_sync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x12"
+            android:text="最新短信更新时间"
+            android:textColor="@color/black_content"
+            android:textSize="@dimen/t16" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_home"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x36"
+            android:layout_marginTop="@dimen/x20"
+            android:background="@drawable/shape_btn"
+            android:elevation="@dimen/x5"
+            android:text="同步上传"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+    </android.support.v7.widget.LinearLayoutCompat>
+</android.support.v4.widget.NestedScrollView>

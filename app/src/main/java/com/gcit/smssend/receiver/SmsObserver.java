@@ -61,7 +61,6 @@ public class SmsObserver extends ContentObserver {
     }
     
     public synchronized void loadSmsData() {
-        Logs.e("loadSmsData");
         final String sDay = TimeUtils.millis2String(System.currentTimeMillis(), new SimpleDateFormat("dd", Locale.getDefault()));
         final String sOldDay = BaseApp.getSpUtils().getString(SharedPrefs.SMS_OBSERVER_COUNT_HOUR, "");
         if (subscribe != null) {

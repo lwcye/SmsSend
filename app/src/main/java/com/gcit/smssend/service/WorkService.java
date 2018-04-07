@@ -3,6 +3,7 @@ package com.gcit.smssend.service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.gcit.smssend.model.SmsModel;
 import com.xdandroid.hellodaemon.AbsWorkService;
 
 import java.util.concurrent.TimeUnit;
@@ -26,6 +27,7 @@ public class WorkService extends AbsWorkService {
     //是否 任务完成, 不再需要服务运行?
     public static boolean sShouldStopService;
     public static Subscription sDisposable;
+
     public WorkService() {
     }
 
@@ -54,22 +56,18 @@ public class WorkService extends AbsWorkService {
     public void startWork(Intent intent, int flags, int startId) {
         System.out.println("检查磁盘中是否有上次销毁时保存的数据");
         sDisposable = Observable
-                .interval(3, TimeUnit.SECONDS)
+                .interval(60, TimeUnit.SECONDS)
                 //取消任务时取消定时唤醒
                 .doOnNext(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
-                        System.out.println("保存数据到磁盘。");
                         cancelJobAlarmSub();
                     }
                 })
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long count) {
-                        System.out.println("每 3 秒采集一次数据... count = " + count);
-                        if (count > 0 && count % 18 == 0) {
-                            System.out.println("保存数据到磁盘。 saveCount = " + (count / 18 - 1));
-                        }
+                        SmsModel.loadSmsListFromSystem();
                     }
                 });
     }

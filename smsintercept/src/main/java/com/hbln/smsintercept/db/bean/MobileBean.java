@@ -5,7 +5,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 /**
- * <p>describe</p><br>
+ * <p>手机模型</p><br>
  *
  * @author - lwc
  * @date - 2017/10/25
