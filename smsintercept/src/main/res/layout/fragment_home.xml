@@ -2,6 +2,7 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/layout_background_default"
     android:fillViewport="true">
 
     <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
@@ -106,8 +107,8 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_home"
-            android:layout_width="@dimen/x120"
-            android:layout_height="@dimen/x36"
+            android:layout_width="@dimen/btn_small"
+            android:layout_height="@dimen/view_height_small"
             android:layout_marginTop="@dimen/x20"
             android:background="@drawable/shape_btn"
             android:elevation="@dimen/x5"

@@ -4,6 +4,7 @@
     <dimen name="title_bar_height_text">@dimen/x47</dimen>
     <dimen name="view_height">@dimen/x45</dimen>
     <dimen name="view_height_small">@dimen/x35</dimen>
+    <dimen name="btn_small">@dimen/x120</dimen>
 
     <dimen name="margin_large">@dimen/x20</dimen>
     <dimen name="margin_normal">@dimen/x16</dimen>

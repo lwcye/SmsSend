@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_background_default">
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/layout_background_default"
+        android:orientation="vertical"
+        tools:context="com.hbln.smsintercept.ui.activity.SettingMobileActivity">
+
+        <include layout="@layout/title_bar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_setting_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false" />
+
+        <View style="@style/view_line_large" />
+
+        <EditText
+            android:id="@+id/et_setting_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height_small"
+            android:layout_margin="@dimen/x12"
+            android:background="@drawable/shape_et"
+            android:gravity="left|center_vertical"
+            android:hint="请输入新增号码"
+            android:padding="@dimen/x5"
+            android:textSize="@dimen/t14" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_setting_mobile"
+            android:layout_width="@dimen/btn_small"
+            android:layout_height="@dimen/view_height_small"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/shape_btn"
+            android:gravity="center"
+            android:text="新增号码"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+    </android.support.v7.widget.LinearLayoutCompat>
+</android.support.v4.widget.NestedScrollView>

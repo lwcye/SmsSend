@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/layout_background_default"
     android:orientation="vertical">
 
     <include layout="@layout/title_bar" />
@@ -18,12 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <android.support.v7.widget.AppCompatButton
+        <com.hbln.smsintercept.ui.widget.DrawableCenterButton
             android:id="@+id/btn_sms_query"
-            android:layout_width="@dimen/x120"
-            android:layout_height="@dimen/x36"
+            android:layout_width="@dimen/btn_small"
+            android:layout_height="@dimen/view_height_small"
             android:background="@drawable/shape_btn"
+            android:drawableLeft="@drawable/ic_sms_qurey"
             android:elevation="@dimen/x5"
+            android:gravity="center"
             android:text="查询短信"
             android:textColor="@color/white"
             android:textSize="@dimen/t14" />
@@ -33,12 +36,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <android.support.v7.widget.AppCompatButton
+        <com.hbln.smsintercept.ui.widget.DrawableCenterButton
             android:id="@+id/btn_sms_upload"
-            android:layout_width="@dimen/x120"
-            android:layout_height="@dimen/x36"
+            android:layout_width="@dimen/btn_small"
+            android:layout_height="@dimen/view_height_small"
             android:background="@drawable/shape_btn"
+            android:drawableLeft="@drawable/ic_sms_upload"
             android:elevation="@dimen/x5"
+            android:gravity="center"
             android:text="批量上传"
             android:textColor="@color/white"
             android:textSize="@dimen/t14" />

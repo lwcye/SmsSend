@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#44A9CB</color>
+    <color name="colorAccent">#34A4CB</color>
     <color name="colorAccentBtn">#1AB394</color>
     <color name="black_title">#333333</color>
     <color name="black_hint">#999999</color>
@@ -14,7 +14,7 @@
     <color name="blue">#00f</color>
     <color name="green">#0f0</color>
     <color name="black">#000</color>
-    <color name="layout_background_default">#F7F7F7</color>
+    <color name="layout_background_default">#F2F2F2</color>
 
     <!--灰阶-->
     <color name="gray0">#FFFFFF</color>

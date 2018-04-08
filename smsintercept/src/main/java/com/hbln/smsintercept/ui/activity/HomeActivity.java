@@ -108,14 +108,23 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             FragmentUtils.hide(homeFragment);
             FragmentUtils.show(smsFragment);
             FragmentUtils.hide(settingFragment);
+            if (!mRbHome0.isChecked()) {
+                mRbHome0.setChecked(true);
+            }
         } else if (index == 1) {
             FragmentUtils.show(homeFragment);
             FragmentUtils.hide(smsFragment);
             FragmentUtils.hide(settingFragment);
+            if (!mRbHome1.isChecked()) {
+                mRbHome1.setChecked(true);
+            }
         } else {
             FragmentUtils.hide(homeFragment);
             FragmentUtils.hide(smsFragment);
             FragmentUtils.show(settingFragment);
+            if (!mRbHome2.isChecked()) {
+                mRbHome2.setChecked(true);
+            }
         }
     }
 }

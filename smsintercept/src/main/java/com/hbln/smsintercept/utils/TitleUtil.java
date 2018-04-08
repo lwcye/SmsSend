@@ -81,7 +81,7 @@ public class TitleUtil {
 
     public TitleUtil setBack(boolean back) {
         if (back) {
-            setLeftDrawable(R.drawable.icon_back, 0, 0, 0)
+            setLeftDrawable(R.drawable.ic_back, 0, 0, 0)
                     .setLeftClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

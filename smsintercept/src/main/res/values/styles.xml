@@ -58,6 +58,12 @@
         <item name="android:background">@color/gray4</item>
     </style>
 
+    <style name="view_line_large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/gray4</item>
+    </style>
+
     <style name="view_line_vir">
         <item name="android:layout_width">@dimen/x1</item>
         <item name="android:layout_height">match_parent</item>

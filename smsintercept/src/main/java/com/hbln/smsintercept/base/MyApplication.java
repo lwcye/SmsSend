@@ -3,6 +3,7 @@ package com.hbln.smsintercept.base;
 import android.app.Application;
 
 import com.blankj.utilcode.util.CrashUtils;
+import com.blankj.utilcode.util.EmptyUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
@@ -60,7 +61,12 @@ public class MyApplication extends Application {
         LogUtils.getConfig().setGlobalTag("cqcity");
         // Retrofit初始化
         RetrofitWrapper.init(this);
-        HttpUtils.setUrl(URLs.HTTP_HOST);
+        String url = getSpUtils().getString(SharedPrefs.URL, "");
+        if (EmptyUtils.isEmpty(url)) {
+            HttpUtils.setUrl(URLs.HTTP_HOST);
+        } else {
+            HttpUtils.setUrl(url);
+        }
         //初始化SharedPreference文件
         spUtils = SPUtils.getInstance(SharedPrefs.FILE_NAME);
         //数据库

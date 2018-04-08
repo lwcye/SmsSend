@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_background_default"
+    tools:context="com.hbln.smsintercept.ui.activity.ErrorActivity">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x12" />
+
+        <TextView
+            android:id="@+id/tv_error_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x12"
+            android:text="当前上传失败短信2条" />
+
+        <View style="@style/view_line_large" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_error"
+            android:layout_width="@dimen/btn_small"
+            android:layout_height="@dimen/view_height_small"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/x12"
+            android:background="@drawable/shape_btn"
+            android:gravity="center"
+            android:text="重新上传"
+            android:textColor="@color/white"
+            android:textSize="@dimen/t14" />
+    </android.support.v7.widget.LinearLayoutCompat>
+</android.support.v4.widget.NestedScrollView>

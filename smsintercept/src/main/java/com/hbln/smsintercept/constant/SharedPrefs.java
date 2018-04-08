@@ -22,4 +22,6 @@ public class SharedPrefs {
     public static final String SMS_OBSERVER_COUNT = "smsObserverCount";
     /** 号码设置的key ,以,分割 **/
     public static final String MOBILE_LIST = "mobileList";
+    /** URL **/
+    public static final String URL = "url";
 }

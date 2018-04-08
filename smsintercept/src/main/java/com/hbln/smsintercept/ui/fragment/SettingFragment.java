@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import com.hbln.smsintercept.R;
 import com.hbln.smsintercept.base.BaseFragment;
 import com.hbln.smsintercept.model.BaseParam;
+import com.hbln.smsintercept.ui.activity.ErrorActivity;
+import com.hbln.smsintercept.ui.activity.RecordActivity;
+import com.hbln.smsintercept.ui.activity.SettingMobileActivity;
+import com.hbln.smsintercept.ui.activity.SettingUrlActivity;
 import com.hbln.smsintercept.ui.adapter.RUAdapter;
 import com.hbln.smsintercept.ui.adapter.RUViewHolder;
 import com.hbln.smsintercept.ui.adapter.SimpleItemDecoration;
@@ -65,6 +69,21 @@ public class SettingFragment extends BaseFragment implements RUAdapter.OnItemCli
 
     @Override
     public void onItemClick(View view, int itemType, int position) {
-
+        switch (position) {
+            case 0:
+                SettingMobileActivity.start(getContext());
+                break;
+            case 1:
+                ErrorActivity.start(getContext());
+                break;
+            case 2:
+                RecordActivity.start(getContext());
+                break;
+            case 3:
+                SettingUrlActivity.start(getContext());
+                break;
+            default:
+                break;
+        }
     }
 }
