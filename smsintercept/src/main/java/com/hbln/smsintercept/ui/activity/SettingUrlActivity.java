@@ -47,7 +47,7 @@ public class SettingUrlActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        mTvSettingUrl.setText(String.format("当前设置的链接为：\n%s", HttpUtils.getUrl()));
+        mTvSettingUrl.setText(HttpUtils.getUrl());
     }
 
     @Override

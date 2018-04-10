@@ -38,10 +38,22 @@
     </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x12"
+        android:layout_marginRight="@dimen/x12"
+        android:layout_marginTop="@dimen/x12"
+        android:text="当前设置的链接为："
+        android:textColor="@color/black_title"
+        android:textSize="@dimen/t14" />
+
+    <TextView
         android:id="@+id/tv_setting_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/x12"
-        android:textColor="@color/black_title"
-        android:textSize="@dimen/t14" />
+        android:layout_marginLeft="@dimen/x12"
+        android:layout_marginRight="@dimen/x12"
+        android:layout_marginTop="@dimen/x5"
+        android:text="http://"
+        android:textColor="@color/colorAccent" />
 </android.support.v7.widget.LinearLayoutCompat>

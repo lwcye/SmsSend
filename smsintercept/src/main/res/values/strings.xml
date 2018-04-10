@@ -8,4 +8,6 @@
     <string name="network">网络：</string>
     <string name="service">服务器：</string>
     <string name="error_network_data">网络错误</string>
+    <string name="exit_if_again">再按一次退出</string>
+    <string name="error_network">网络错误</string>
 </resources>

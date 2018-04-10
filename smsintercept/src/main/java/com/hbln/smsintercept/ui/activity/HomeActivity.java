@@ -8,15 +8,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.blankj.utilcode.util.FragmentUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.hbln.smsintercept.R;
 import com.hbln.smsintercept.base.BaseActivity;
+import com.hbln.smsintercept.constant.ENVs;
 import com.hbln.smsintercept.ui.fragment.HomeFragment;
 import com.hbln.smsintercept.ui.fragment.SettingFragment;
 import com.hbln.smsintercept.ui.fragment.SmsFragment;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.xdandroid.hellodaemon.IntentWrapper;
 
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
     /** 界面 */
@@ -38,6 +44,8 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private SettingFragment settingFragment;
     /** 索引 */
     private int index;
+    /** 是否退出 */
+    private boolean mIsExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,22 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     //防止华为机型未加入白名单时按返回键回到桌面再锁屏后几秒钟进程被杀
     public void onBackPressed() {
         IntentWrapper.onBackPressed(this);
+        if (mIsExit) {
+            finish();
+            IntentWrapper.onBackPressed(this);
+        } else {
+            mIsExit = true;
+            ToastUtils.showShort(getString(R.string.exit_if_again));
+            Observable.timer(ENVs.BACK_TO_EXIT_INTERVAL, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Action1<Long>() {
+                        @Override
+                        public void call(Long aLong) {
+                            mIsExit = false;
+                        }
+                    });
+        }
     }
 
     private void initView() {
