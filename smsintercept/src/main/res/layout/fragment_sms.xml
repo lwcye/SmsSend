@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/layout_background_default"
     android:orientation="vertical">
 
-    <include layout="@layout/title_bar" />
+    <include layout="@layout/title_bar"/>
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         <android.support.v4.widget.Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <com.hbln.smsintercept.ui.widget.DrawableCenterButton
             android:id="@+id/btn_sms_query"
@@ -25,16 +25,17 @@
             android:layout_height="@dimen/view_height_small"
             android:background="@drawable/shape_btn"
             android:drawableLeft="@drawable/ic_sms_qurey"
+            android:drawablePadding="@dimen/x5"
             android:elevation="@dimen/x5"
             android:gravity="center"
             android:text="查询短信"
             android:textColor="@color/white"
-            android:textSize="@dimen/t14" />
+            android:textSize="@dimen/t14"/>
 
         <android.support.v4.widget.Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <com.hbln.smsintercept.ui.widget.DrawableCenterButton
             android:id="@+id/btn_sms_upload"
@@ -42,21 +43,27 @@
             android:layout_height="@dimen/view_height_small"
             android:background="@drawable/shape_btn"
             android:drawableLeft="@drawable/ic_sms_upload"
+            android:drawablePadding="@dimen/x5"
             android:elevation="@dimen/x5"
             android:gravity="center"
             android:text="批量上传"
             android:textColor="@color/white"
-            android:textSize="@dimen/t14" />
+            android:textSize="@dimen/t14"/>
 
         <android.support.v4.widget.Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
     </android.support.v7.widget.LinearLayoutCompat>
 
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_sms_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="设置号码接受短信90条\n上传成功70条\n上传失败10条" />
+        android:text="接受短信90条\n上传成功70条\n上传失败10条"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_sms"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </android.support.v7.widget.LinearLayoutCompat>

@@ -91,4 +91,6 @@ dependencies {
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     testCompile 'junit:junit:4.12'
     compile 'com.xdandroid:hellodaemon:+'
+    // 数据库调试
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.3'
 }

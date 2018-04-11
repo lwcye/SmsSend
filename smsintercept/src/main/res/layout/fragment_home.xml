@@ -40,7 +40,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_tick"
                 android:drawablePadding="@dimen/x5"
-                android:text="@string/status_connect"
+                android:text="@string/status_connecting"
                 android:textColor="@color/black"
                 android:textSize="@dimen/t16" />
         </android.support.v7.widget.LinearLayoutCompat>
@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_tick"
                 android:drawablePadding="@dimen/x5"
-                android:text="@string/status_connect"
+                android:text="@string/status_connecting"
                 android:textColor="@color/black"
                 android:textSize="@dimen/t16" />
         </android.support.v7.widget.LinearLayoutCompat>

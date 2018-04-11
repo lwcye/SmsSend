@@ -19,7 +19,7 @@
         <View style="@style/view_line_large" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_error"
+            android:id="@+id/btn_record_del"
             android:layout_width="match_parent"
             android:layout_height="@dimen/view_height"
             android:layout_gravity="center_horizontal"

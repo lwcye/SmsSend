@@ -1,16 +1,18 @@
 package com.hbln.smsintercept.ui.fragment;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.NetworkUtils;
 import com.hbln.smsintercept.R;
 import com.hbln.smsintercept.base.BaseFragment;
+import com.hbln.smsintercept.network.HttpUtils;
+import com.trello.rxlifecycle.android.FragmentEvent;
+
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2018/4/7.
@@ -47,7 +49,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mTvHomeStatusNetwork.setTextColor(Color.RED);
             mTvHomeStatusNetwork.setText(R.string.status_connect_error);
         }
+        HttpUtils.getSmsInfoService().smsinfo("")
+                .compose(applySchedulers(FragmentEvent.DESTROY))
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
 
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        mTvHomeStatusService.setTextColor(Color.RED);
+                        mTvHomeStatusService.setText(R.string.status_connect_error);
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        mTvHomeStatusService.setText(R.string.status_connect);
+                    }
+                });
     }
 
     @Override
