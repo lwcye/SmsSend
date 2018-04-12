@@ -1,6 +1,7 @@
 package com.hbln.smsintercept.db.bean;
 
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hbln.smsintercept.R;
 import com.hbln.smsintercept.db.DbWrapper;
 import com.hbln.smsintercept.event.NotifyAdapter;
@@ -65,7 +66,8 @@ public class SmsBean {
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        DbWrapper.getSession().getSmsBeanDao().insert(smsBean);
+                        throwable.printStackTrace();
+                        DbWrapper.getSession().getSmsBeanDao().insertOrReplace(smsBean);
                         smsBean.setIsSuccess(false);
                         smsBean.setErrorMsg(ResUtils.getString(R.string.error_network));
                     }
@@ -74,9 +76,15 @@ public class SmsBean {
                 .doOnNext(new Action1<ApiResult>() {
                     @Override
                     public void call(ApiResult apiResult) {
-                        smsBean.setIsSuccess(true);
-                        DbWrapper.getSession().getSmsBeanDao().delete(smsBean);
-                        DbWrapper.getSession().getSuccessSmsBeanDao().insertOrReplace(new SuccessSmsBean(smsBean.getCreate_time(), smsBean.getMobile(), smsBean.getContent()));
+                        if (apiResult.status == 1) {
+                            smsBean.setIsSuccess(true);
+                            DbWrapper.getSession().getSmsBeanDao().delete(smsBean);
+                            DbWrapper.getSession().getSuccessSmsBeanDao().insertOrReplace(new SuccessSmsBean(smsBean.getCreate_time(), smsBean.getMobile(), smsBean.getContent()));
+                        } else {
+                            DbWrapper.getSession().getSmsBeanDao().insertOrReplace(smsBean);
+                            smsBean.setIsSuccess(false);
+                            smsBean.setErrorMsg(apiResult.info);
+                        }
                     }
                 });
     }
@@ -85,7 +93,7 @@ public class SmsBean {
      * 上传短信
      * @param smsBean
      */
-    public static void requestPostSms(final SmsBean smsBean) {
+    public static void requestPostSms(final SmsBean smsBean, final Action1<SmsBean> mAction0) {
         getSmsBeanPostObservable(smsBean)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<ApiResult>() {
@@ -96,11 +104,17 @@ public class SmsBean {
                     @Override
                     public void call(Throwable throwable) {
                         EventBus.getDefault().post(new NotifyAdapter(smsBean));
+                        if (mAction0 != null) {
+                            mAction0.call(smsBean);
+                        }
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
                         EventBus.getDefault().post(new NotifyAdapter(smsBean));
+                        if (mAction0 != null) {
+                            mAction0.call(smsBean);
+                        }
                     }
                 });
     }

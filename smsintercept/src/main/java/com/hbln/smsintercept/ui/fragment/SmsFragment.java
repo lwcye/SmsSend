@@ -24,6 +24,8 @@ import com.hbln.smsintercept.base.BaseFragment;
 import com.hbln.smsintercept.db.DbWrapper;
 import com.hbln.smsintercept.db.bean.MobileBean;
 import com.hbln.smsintercept.db.bean.SmsBean;
+import com.hbln.smsintercept.db.bean.SuccessSmsBean;
+import com.hbln.smsintercept.db.dao.SuccessSmsBeanDao;
 import com.hbln.smsintercept.event.NotifyAdapter;
 import com.hbln.smsintercept.network.ApiResult;
 import com.hbln.smsintercept.receiver.SmsObserver;
@@ -104,7 +106,11 @@ public class SmsFragment extends BaseFragment implements View.OnClickListener, R
                 } else {
                     tvState.setText(data.getErrorMsg());
                     tvState.setTextColor(Color.RED);
-                    SmsBean.requestPostSms(data);
+                    SmsBean.requestPostSms(data, new Action1<SmsBean>() {
+                        @Override
+                        public void call(SmsBean mSmsBean) {
+                        }
+                    });
                 }
             }
         };
@@ -162,7 +168,12 @@ public class SmsFragment extends BaseFragment implements View.OnClickListener, R
         builder.setPositiveButton("上传", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SmsBean.requestPostSms(smsBean);
+                SmsBean.requestPostSms(smsBean, new Action1<SmsBean>() {
+                    @Override
+                    public void call(SmsBean mSmsBean) {
+
+                    }
+                });
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -181,7 +192,7 @@ public class SmsFragment extends BaseFragment implements View.OnClickListener, R
             //数量
             long countAll = DbWrapper.getSession().getSmsBeanDao().count();
             long countSuccess = DbWrapper.getSession().getSuccessSmsBeanDao().count();
-            mTvSmsTotal.setText("接受短信" + (countAll + countSuccess) + "条\\n上传成功" + countSuccess + "条\\n上传失败" + countAll + "条");
+            mTvSmsTotal.setText("接受短信" + (countAll + countSuccess) + "条\n上传成功" + countSuccess + "条\n上传失败" + countAll + "条");
             //刷新列表
             mAdapter.addDataFirst(notifyAdapter.mSmsBean);
         }
@@ -225,7 +236,10 @@ public class SmsFragment extends BaseFragment implements View.OnClickListener, R
                             String smsSender = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
                             String smsBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
                             long date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE));
-                            boolean saved = DbWrapper.isSaved(date);
+                            LogUtils.e(date);
+                            boolean saved = DbWrapper.getSession().getSuccessSmsBeanDao().count() > 0 &&
+                                    DbWrapper.getSession().getSuccessSmsBeanDao().queryBuilder()
+                                            .where(SuccessSmsBeanDao.Properties.Create_time.eq(date)).count() > 0;
                             mSmsList.add(new SmsBean(date, smsSender, smsBody, saved, saved ? "已完成" : "未上传"));
                         }
                         CloseUtils.closeIO(cursor);
@@ -239,13 +253,15 @@ public class SmsFragment extends BaseFragment implements View.OnClickListener, R
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        LogUtils.e(throwable);
+                        hideLoading();
+                        throwable.printStackTrace();
                         ToastUtils.showShort("查询出错：" + throwable.getMessage());
                         mAdapter.setData(mSmsList);
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
+                        hideLoading();
                         Collections.sort(mSmsList, new Comparator<SmsBean>() {
                             @Override
                             public int compare(SmsBean o1, SmsBean o2) {

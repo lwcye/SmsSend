@@ -155,8 +155,8 @@ public abstract class RUAdapter<T> extends RecyclerView.Adapter {
      * @param item 子数据
      */
     public void addDataFirst(T item) {
-        mData.add(1, item);
-        notifyItemInserted(1);
+        mData.add(0, item);
+        notifyItemInserted(0);
     }
     
     /**

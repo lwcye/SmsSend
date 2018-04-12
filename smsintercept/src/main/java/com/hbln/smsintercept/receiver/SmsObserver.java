@@ -17,12 +17,10 @@ import com.hbln.smsintercept.db.DbWrapper;
 import com.hbln.smsintercept.db.bean.MobileBean;
 import com.hbln.smsintercept.db.bean.SmsBean;
 import com.hbln.smsintercept.event.SmsEvent;
-import com.hbln.smsintercept.model.SmsModel;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 import rx.Observable;

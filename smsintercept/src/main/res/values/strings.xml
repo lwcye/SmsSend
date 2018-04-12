@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">smsIntercept</string>
+    <string name="app_name">村务卡短信</string>
     <string name="sms">短信</string>
     <string name="home">首页</string>
     <string name="setting">设置</string>

@@ -9,6 +9,7 @@
     <dimen name="margin_large">@dimen/x20</dimen>
     <dimen name="margin_normal">@dimen/x16</dimen>
     <dimen name="margin_small">@dimen/x12</dimen>
+    <dimen name="margin_tiny">8dp</dimen>
 
     <!-- text -->
     <dimen name="t8">8sp</dimen>

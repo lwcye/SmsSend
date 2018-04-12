@@ -1,5 +1,8 @@
 package com.hbln.smsintercept.db.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.hbln.smsintercept.db.DbWrapper;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -20,7 +23,7 @@ import java.util.List;
  * @note -
  */
 @Entity
-public class MobileBean {
+public class MobileBean implements Parcelable {
     @Id
     private String mobile;
 
@@ -56,4 +59,30 @@ public class MobileBean {
     public static void insertMobile(MobileBean mMobileBean) {
         DbWrapper.getSession().getMobileBeanDao().insert(mMobileBean);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mobile);
+    }
+
+    protected MobileBean(Parcel in) {
+        this.mobile = in.readString();
+    }
+
+    public static final Parcelable.Creator<MobileBean> CREATOR = new Parcelable.Creator<MobileBean>() {
+        @Override
+        public MobileBean createFromParcel(Parcel source) {
+            return new MobileBean(source);
+        }
+
+        @Override
+        public MobileBean[] newArray(int size) {
+            return new MobileBean[size];
+        }
+    };
 }

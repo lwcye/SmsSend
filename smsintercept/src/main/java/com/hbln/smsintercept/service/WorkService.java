@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -99,7 +100,7 @@ public class WorkService extends AbsWorkService {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnOrderEvent(SmsEvent smsEvent) {
-        SmsBean.requestPostSms(smsEvent.mSmsBean);
+        SmsBean.requestPostSms(smsEvent.mSmsBean, null);
     }
 
     @Override

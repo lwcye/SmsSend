@@ -60,7 +60,7 @@
         android:id="@+id/tv_sms_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="接受短信90条\n上传成功70条\n上传失败10条"/>
+        android:text="接受短信0条\n上传成功0条\n上传失败0条"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_sms"

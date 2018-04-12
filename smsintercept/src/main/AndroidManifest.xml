@@ -58,6 +58,7 @@
         <activity android:name=".ui.activity.ErrorActivity" />
         <activity android:name=".ui.activity.RecordActivity" />
         <activity android:name=".ui.activity.SettingUrlActivity"></activity>
+        <activity android:name=".ui.activity.RecordDetailActivity" />
     </application>
 
 </manifest>
